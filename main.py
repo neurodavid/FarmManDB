@@ -1,14 +1,23 @@
 # main.py
+import tkinter as tk
 from DAL import Database, FieldsRepository, TasksRepository
+from GUI.fields_gui import FieldsGUI
 
-# Initiera databasen och repositories
-db = Database("farm_management.db")
-fields_repo = FieldsRepository(db)
-tasks_repo = TasksRepository(db)
+def main():
+    # Initiera databasen och repositories
+    db = Database("farm_management.db")
+    fields_repo = FieldsRepository(db)
+    tasks_repo = TasksRepository(db)
 
-# Använd exempel: Skapa ett fält
-fields_repo.create_field("Field B", 20.0, "POLYGON((...))", "North side")
+    # Initiera huvudfönstret för GUI
+    root = tk.Tk()
+    root.title("Gårdsdatabas - Administrationsverktyg")
 
-# Använd exempel: Hämta ett fält
-field = fields_repo.get_field(1)
-print("Field details:", field)
+    # Instansiera och visa Fields GUI
+    fields_gui = FieldsGUI(root, fields_repo)
+
+    # Kör GUI
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
