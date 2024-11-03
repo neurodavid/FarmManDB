@@ -11,7 +11,9 @@ class TasksRepository:
         VALUES (?, ?, ?, ?, ?, ?)
         """
         self.db.execute_query(query, (field_id, employee_id, machinery_id, task_type, start_time, end_time))
-
+    def get_all_tasks(self):
+        query = "SELECT * FROM Tasks"
+        return self.db.fetch_all(query)
     def get_task(self, task_id):
         query = "SELECT * FROM Tasks WHERE TaskID = ?"
         return self.db.fetch_one(query, (task_id,))
@@ -19,6 +21,13 @@ class TasksRepository:
     def get_tasks_for_field(self, field_id):
         query = "SELECT * FROM Tasks WHERE FieldID = ?"
         return self.db.fetch_all(query, (field_id,))
+
+    def update_task(self, task_id, field_id, employee_id, machinery_id, task_type, start_time, end_time):
+        query = """
+        UPDATE Tasks SET FieldID = ?, EmployeeID = ?, MachineryID = ?, TaskType = ?, StartTime = ?, EndTime = ?
+        WHERE TaskID = ?
+        """
+        self.db.execute_query(query, (field_id, employee_id, machinery_id, task_type, start_time, end_time, task_id))
 
     def delete_task(self, task_id):
         query = "DELETE FROM Tasks WHERE TaskID = ?"
