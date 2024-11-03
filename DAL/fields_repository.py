@@ -21,27 +21,13 @@ class FieldsRepository:
         query = "SELECT * FROM Fields WHERE FieldID = ?"
         return self.db.fetch_one(query, (field_id,))
 
-    def update_field(self, field_id, field_name=None, area=None, polygon_data=None, location=None):
-        updates = []
-        params = []
+    def update_field(self, field_id, field_name, area,   location):
+        query = """
+        UPDATE Fields SET FieldName =?, Area =?, PolygonData =?, Location =? 
+        WHERE FieldID =?
+        """
+        self.db.execute_query(query, (field_id, field_name, area, polygon_data, location))
         
-        if field_name:
-            updates.append("FieldName = ?")
-            params.append(field_name)
-        if area:
-            updates.append("Area = ?")
-            params.append(area)
-        if polygon_data:
-            updates.append("PolygonData = ?")
-            params.append(polygon_data)
-        if location:
-            updates.append("Location = ?")
-            params.append(location)
-        
-        params.append(field_id)
-        query = f"UPDATE Fields SET {', '.join(updates)} WHERE FieldID = ?"
-        self.db.execute_query(query, params)
-
     def delete_field(self, field_id):
         query = "DELETE FROM Fields WHERE FieldID = ?"
         self.db.execute_query(query, (field_id,))
